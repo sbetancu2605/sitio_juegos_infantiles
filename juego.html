@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/estilos.css">
+    <title>Juego de Memoria | Jhon Ever</title>
+    <link rel="icon" href="imagen/icono.png">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="my-3 text-center text-light">Juego de Memoria</h1>
+            </div>
+            <div class="col-md-12">
+                <ul class="nav justify-content-center">
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold" href="#">Intentos: <span class="intentos text-light">0</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold" href="#">Aciertos: <span class="aciertos text-light">0</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold" href="#">Tiempo: <span class="tiempo text-light">0</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold" href="#">Nivel: <span class="nivel text-light">0</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="btn-iniciar btn btn-dark">Iniciar</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <h2 class="text-light fw-bold">Tablero de Juego</h2>
+                <hr>
+                <div class="row g-3 mb-5 tablero">
+                    <!--Aquí van las imagenes del tablero-->
+                </div>
+            </div>
+            <div class="col-md-5">
+                <h2 class="text-light text-center fw-bold">Tabla de Posiciones</h2>
+                <table class="table table-striped table-dark mt-3 records text-center">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Jugador</th>
+                            <th>Intentos Totales</th>
+                            <th>Tiempo Total</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<script src="funciones.js"></script>
+
+<script>
+
+let jugador = nombreJugadorInput.value || "Invitado";  // Si no se ingresa nada, se usará "Invitado"
+
+// Simulamos datos de prueba para intentos, aciertos, tiempo y nivel (estos deben cambiar durante el juego)
+let intentos = 5;
+let aciertos = 4;
+let tiempo = 120; // en segundos
+let nivel = 2;
+
+// Actualizamos el nombre del jugador en la interfaz
+nombreJugadorInput.addEventListener('input', function() {
+    jugador = nombreJugadorInput.value || "Invitado";
+    document.getElementById('nombre-jugador-text').textContent = jugador;
+});
+
+// Enviar los datos al backend cuando el jugador termine el juego
+function enviarDatos() {
+    fetch('/guardar_resultado', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            nombre_jugador: jugador,
+            aciertos: aciertos,
+            intentos: intentos,
+            tiempo: tiempo,
+            nivel: nivel
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Datos guardados", data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Llamamos a la función cuando el jugador presione el botón para finalizar
+document.querySelector('.btn-iniciar').addEventListener('click', function() {
+    // Simula el fin del juego y envía los datos
+    enviarDatos();
+});
+</script>
+
+</body>
+</html>
